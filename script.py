@@ -9,6 +9,7 @@ token_images = []
 contract_address = []
 decimal = []
 supply_amount = []
+final_data = []
 
 # url to navigate to
 str = 'https://etherscan.io/'
@@ -43,8 +44,9 @@ for token in token_images_nodes:
 print(token_images)
 
 # Message for the command line
+print('-------------------------------------------------------------------------------')
 print('Please wait scraping the remaining data')
-
+print('-------------------------------------------------------------------------------')
 
 # navigation to different page and scraping the data
 # iterating and getting the link for each erc20 token
