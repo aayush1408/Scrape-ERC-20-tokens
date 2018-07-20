@@ -28,10 +28,6 @@ token_description_nodes = soup.select('small font')
 # list of nodes for token images
 token_images_nodes  = soup.find_all('img')
 
-# Message for the command line
-print('Please wait scraping the remaining data')
-
-
 # Storing the values in the empty lists
 # list of nodes for token description
 for token in token_name_nodes:
@@ -46,6 +42,9 @@ for token in token_images_nodes:
   token_images.append(token.get('src'))
 print(token_images)
 
+# Message for the command line
+print('Please wait scraping the remaining data')
+
 
 # navigation to different page and scraping the data
 # iterating and getting the link for each erc20 token
@@ -59,22 +58,18 @@ for link in token_name_nodes:
     soupy = BeautifulSoup(res_of_another_page.text,'html.parser')
 
     # Getting the desired nodes
-    table = soupy.findAll('table')
     row1 = soupy.find('tr', {'id':'ContentPlaceHolder1_tr_valuepertoken'})
-    row2 = table[1].findAll('tr')
-
-    #handling the received data
-    contract_address_value = row2[1].getText()[16:-10]
-    decimal_value = row2[2].getText()[14:-2]
-    supply_amount_value = row1.find_previous_siblings()[0].findAll('td')[1].getText()[1:-1] 
-    print(contract_address_value)
-    print(decimal_value)
-    print(supply_amount_value)
+    row2 = soupy.find('tr', {'id':'ContentPlaceHolder1_trContract'})
+    row3 = soupy.find('tr', {'id':'ContentPlaceHolder1_trDecimals'})
 
     #Appending every value to the list
-    supply_amount.append(supply_amount_value)
-    contract_address.append(contract_address_value)
-    decimal.append(decimal_value)
+    supply_amount.append(row1.find_previous_siblings()[0].findAll('td')[1].getText()[1:-1])
+    contract_address.append(row2.findAll('td')[1].getText())
+    decimal.append(row3.findAll('td')[1].getText()[1:-1])
+    print(row1.find_previous_siblings()[0].findAll('td')[1].getText()[1:-1])    
+    print(row2.findAll('td')[1].getText()[1:-1])
+    print(row3.findAll('td')[1].getText()[1:-1])
+
 print(contract_address)
 print(decimal)
 print(supply_amount)
