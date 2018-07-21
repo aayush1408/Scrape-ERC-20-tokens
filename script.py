@@ -14,7 +14,7 @@ complete_data = []
 # url to navigate to
 str = 'https://etherscan.io/'
 
-#Request the web page
+# Request the web page
 res = requests.get('https://etherscan.io/tokens')
 
 # Use beautiful soup
@@ -23,32 +23,37 @@ soup = BeautifulSoup(res.text,'html.parser')
 # list of nodes for token name
 token_name_nodes = soup.select('h5 a')
 
-# list of nodes for token description
-token_description_nodes = soup.select('small font')
+# list of nodes for token description, images and names 
+table = soup.find('table')
+rows = table.find_all('tr')[1:]
+for data in rows:
+    name_nodes =  data.find_all('td')[2]
+    name = name_nodes.find('h5').getText()
+    data1 = data.find_all('td')[1]
+    img_url = str + data1.find('img').get('src')
+    data2 = data.find_all('td')[2]
+    try:
+        description = data2.find('font').getText()
+    except AttributeError:
+        description = ' '
 
-# list of nodes for token images
-token_images_nodes  = soup.find_all('img')
+    token_names.append(name)    
+    token_images.append(img_url)
+    token_descriptions.append(description) 
 
-# Storing the values in the empty lists
-for token in token_name_nodes:
-  token_names.append(token.getText())
-print(len(token_names))
-
-for token in token_description_nodes:
-  token_descriptions.append(token.getText())
-print(len(token_descriptions))
-
-for token in token_images_nodes:
-  token_images.append(str + token.get('src'))
+print(token_descriptions)
 print(token_images)
+print(token_names)
+
 
 # Message for the command line
 print('---------------------------------------------------------------------------------------------------------------')
 print('Please wait scraping the remaining data')
 print('---------------------------------------------------------------------------------------------------------------')
 
-# navigation to different page and scraping the data
-# iterating and getting the link for each erc20 token
+# # # navigation to different page and scraping the data
+# # # iterating and getting the link for each erc20 token
+
 for link in token_name_nodes:
 
     #appending the link
@@ -86,9 +91,9 @@ print('-------------------------------------------------------------------------
 print('Please wait collecting the whole data...')
 print('-------------------------------------------------------------------------------------------------------------')
 
-
-for i in range(49):
-    dict = {'serial_no':i,'name':token_names[i],'description':token_descriptions[i],'contract':contract_address[i],'decimal':decimal[i],'supply':supply_amount[i]}
+# Storing the final data in a list of dictonary
+for i in range(50):
+    dict = {'serial_no':i+1,'name':token_names[i],'image_url':token_images[i],'description':token_descriptions[i],'contract':contract_address[i],'decimal':decimal[i],'supply':supply_amount[i]}
     complete_data.append(dict)
 
 print(complete_data)    
