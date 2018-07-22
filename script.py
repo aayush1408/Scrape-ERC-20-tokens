@@ -4,7 +4,7 @@ import csv
 import sys
 
 # Setup the file
-csvfile = open('test4.csv','w+')
+csvfile = open('test.csv','w+')
 
 # empty lists for storing the scraped data
 token_names = []
@@ -16,7 +16,9 @@ supply_amount = []
 serial_nos = []
 complete_data = []
 k = 1
+
 while(k<=12):
+
     # url to navigate to
     str_token = 'https://etherscan.io/'
     url = 'https://etherscan.io/tokens?p='+str(k)
@@ -53,7 +55,6 @@ while(k<=12):
     print(token_images)
     print(token_names)
 
-
     # Message for the command line
     print('---------------------------------------------------------------------------------------------------------------')
     print('Please wait scraping the remaining data')
@@ -88,24 +89,22 @@ while(k<=12):
         except AttributeError:
             sys.exit('Something went wrong with the network,please try again!!')
 
-
-
     print(contract_address)
     print(decimal)
     print(supply_amount)
 
-
-    # Message for the command line
-    print('-------------------------------------------------------------------------------------------------------------')
-    print('Please wait collecting the whole data...')
-    print('-------------------------------------------------------------------------------------------------------------')
-
     k += 1 
+
+# Message for the command line
+print('-------------------------------------------------------------------------------------------------------------')
+print('Please wait collecting the whole data...')
+print('-------------------------------------------------------------------------------------------------------------')
+
 
 try:
     writer =  csv.writer(csvfile)
     writer.writerow(('Serial-No','Name','Image-Url','Description','Decimal','Contract','Total Supply'))
-    for i in range(550):
+    for i in range(558):
         writer.writerow((serial_nos[i],token_names[i],token_images[i],token_descriptions[i],decimal[i],contract_address[i],supply_amount[i]))
 finally:
     csvfile.close()
